@@ -19,7 +19,7 @@ $.noConflict();
               center: latLng,
               zoom: 10,
             };
-            var infoStr = 'The city is ' + city + ' in state of ' + state;
+            var infoStr = 'The city is ' + city + ' in the state of ' + state;
             $('#city-info').text(infoStr);
   
             /* Load the map and marker of the city */
@@ -33,11 +33,9 @@ $.noConflict();
             $.get(sUrl,
               function(data,json){
                 /* Get sunrise, sunset data */
-                var sunriseH = data.moon_phase.sunrise.hour;
-                var sunriseM = data.moon_phase.sunrise.minute;
-                var sunsetH = data.moon_phase.sunset.hour - 12;
-                var sunsetM = data.moon_phase.sunset.minute;
-                var dayInfoStr = 'In ' + city + ' Sunrise is at ' + sunriseH  + ':' + sunriseM + ' A.M. Sunset is at ' + sunsetH + ':' + sunsetM + ' P.M.';
+                var sunrise = data.moon_phase.sunrise.hour + ":" + data.moon_phase.sunrise.minute;
+                var sunset = data.moon_phase.sunset.hour - 12 + ":" + data.moon_phase.sunset.minute;
+                var dayInfoStr = 'In ' + city + ' Sunrise is at ' + sunrise + ' A.M. Sunset is at ' + sunset + ' P.M.';
                 $('#day-info').text(dayInfoStr);
               })
             
