@@ -2,13 +2,20 @@ $.noConflict();
 (function($) {
   $(document).ready(
     function() {
-       $('#city-zip-form').on('submit', function(event) {
+      var zip;
+      var url;    
+      $('#city-zip-form').on('submit', function(event) {
         $('#zip-error').text(''); 
-        var zip = $('#zip').val();
-        var url = 'http://api.zippopotam.us/us/' + zip;
+        zip = $('#zip').val();
+        url = 'http://api.zippopotam.us/us/' + zip;
         $.get(url).done(
-          function(data,json) {
+          function(data) {
             /* Parsing data from zip API */
+            var infoStr;
+            var map;
+            var marker;
+            var sUrl;
+            var sSUrl;
             var city = data.places[0]['place name'];
             var state = data.places[0].state;
             var longitude = data.places[0].longitude; 
@@ -17,21 +24,21 @@ $.noConflict();
             var latLng = new google.maps.LatLng(latitue, longitude);
             var mapOptions = {
               center: latLng,
-              zoom: 10,
+              zoom: 10
             };
-            var infoStr = 'The city is ' + city + ' in the state of ' + state;
+            infoStr = 'The city is ' + city + ' in the state of ' + state;
             $('#city-info').text(infoStr);
   
             /* Load the map and marker of the city */
-            var map = new google.maps.Map(document.getElementById('map'), mapOptions); 
-            var marker = new google.maps.Marker({
+            map = new google.maps.Map(document.getElementById('map'), mapOptions); 
+            marker = new google.maps.Marker({
               position: latLng,
               map:map
             });
           
-            var sUrl = 'http://api.wunderground.com/api/5c122fcc2f912983/astronomy/q/'+stateAB+'/'+city+'.json';
+            sUrl = 'http://api.wunderground.com/api/5c122fcc2f912983/astronomy/q/'+stateAB+'/'+city+'.json';
             $.get(sUrl,
-              function(data,json){
+              function(data){
                 /* Get sunrise, sunset data */
                 var sunrise = data.moon_phase.sunrise.hour + ":" + data.moon_phase.sunrise.minute;
                 var sunset = data.moon_phase.sunset.hour - 12 + ":" + data.moon_phase.sunset.minute;
@@ -39,9 +46,9 @@ $.noConflict();
                 $('#day-info').text(dayInfoStr);
               })
             
-            var sSUrl = 'http://api.wunderground.com/api/5c122fcc2f912983/conditions/q/'+stateAB+'/'+city+'.json';
+            sSUrl = 'http://api.wunderground.com/api/5c122fcc2f912983/conditions/q/'+stateAB+'/'+city+'.json';
             $.get(sSUrl,
-              function(data,json){
+              function(data){
                 /* Ge weather condition data */
                 var weather = data.current_observation.weather;
                 var temp = data.current_observation.temperature_string;
@@ -54,7 +61,7 @@ $.noConflict();
       })
     }
     )
-  })(jQuery);
+})(jQuery);
   
 
  
